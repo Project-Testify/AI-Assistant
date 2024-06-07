@@ -1,22 +1,18 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException
+from fastapi import APIRouter, File, UploadFile, HTTPException, Response
 import os
 
 from ..services.pinecone_upsert import upsert
 
 router = APIRouter()
 
-@router.post("/upload-pdf/")
-async def upload_pdf(file: UploadFile = File(...)):
+@router.post("/upload-pdf/", status_code=201)
+async def upload_pdf(file: UploadFile = File(...)) -> dict:
+    """Endpoint to upload a PDF and upsert its contents into a Pinecone vector store."""
+
     if file.content_type != 'application/pdf':
         raise HTTPException(status_code=415, detail="Unsupported file type. Please upload a PDF.")
 
-
-
-    # upsert
-    upsert(file,examid='examid')
+    # Call the upsert function from the imported service
+    upsert(file, examid='examid')
 
     return {"filename": file.filename}
-
-
-
-   
