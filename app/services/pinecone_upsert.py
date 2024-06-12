@@ -1,10 +1,10 @@
-from typing import Any, BinaryIO
+from typing import  BinaryIO
 import os
 import dotenv
 import pdfplumber
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone
 
 dotenv.load_dotenv()
 

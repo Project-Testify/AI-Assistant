@@ -1,10 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException
-from typing import List
-from fastapi.responses import JSONResponse
-
-from langchain_core.pydantic_v1 import BaseModel, Field
-
-
+from fastapi import APIRouter, Query
 from ..services.prompt import prompt
 
 

@@ -1,16 +1,12 @@
-from typing import Any, BinaryIO
 import os
 import dotenv
-import pdfplumber
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone
 
-from typing import Optional
 from langchain_core.pydantic_v1 import BaseModel, Field
 
 # JSONresponse
-from fastapi.responses import JSONResponse
 
 
 # from langchain.chat_models import ChatOpenAI
