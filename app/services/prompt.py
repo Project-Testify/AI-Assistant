@@ -1,44 +1,20 @@
 import os
 import dotenv
-from langchain_openai import OpenAIEmbeddings
+import json
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone
-
 from langchain_core.pydantic_v1 import BaseModel, Field
-
-# JSONresponse
-
-
-# from langchain.chat_models import ChatOpenAI
-# from langchain_community.chat_models import ChatOpenAI
-from langchain_openai import ChatOpenAI
-from langchain.chains import RetrievalQA
-
-from langchain_core.prompts import PromptTemplate
-
-# json output parser
-
-import json
+from langchain_core.output_parsers import JsonOutputParser
+from langchain.prompts import PromptTemplate
 
 from ..data.questionPrompts import mcq_prompt, essay_prompt
 
-# jsonoutputparser
-from langchain_core.output_parsers import JsonOutputParser
-
-LLMChain = ChatOpenAI()
-
-
-
-
 dotenv.load_dotenv()
-
-pinecone = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
-
 
 class QuestionParser(BaseModel):
     question: str = Field(description="The question generated from the text.")
-    answer: str= Field(description="The answer to the generated question.")
-
+    answer: str = Field(description="The answer to the generated question.")
 
 class MultipleChoiceQuestionParser(BaseModel):
     question: str = Field(description="The multiple choice question generated from the text.")
@@ -46,29 +22,21 @@ class MultipleChoiceQuestionParser(BaseModel):
     answer: int = Field(description="The index of the correct answer in the options list.")
 
 def format_docs(docs):
+    """Helper function to format document content."""
     return "\n\n".join([d.page_content for d in docs])
-
 
 def select_prompt(question_type: str) -> tuple[str, JsonOutputParser]:
     """Selects the appropriate prompt and parser based on the question type."""
     if question_type == "mcq":
-        return mcq_prompt(4)
+        return mcq_prompt(4)  # This function is assumed to return a tuple (prompt, parser)
     elif question_type == "essay":
-        return essay_prompt()
+        return essay_prompt()  # This function is assumed to return a tuple (prompt, parser)
     else:
         raise ValueError("Invalid question type. Please select 'mcq' or 'essay'.")
 
-
-
-def prompt(text: str, examid: str, question_type: str = "mcq") -> any:
-    """Upserts PDF text into a Pinecone vector store and returns the extracted text."""
-
-
-
-
-    question , parser = select_prompt(question_type)
-
-
+def prompt(text: str, examid: str, question_type: str = "mcq") -> dict:
+    """Generates a question based on the provided text and exam ID."""
+    question, parser = select_prompt(question_type)
 
     embed = OpenAIEmbeddings(
         model="text-embedding-3-large",
@@ -80,79 +48,26 @@ def prompt(text: str, examid: str, question_type: str = "mcq") -> any:
         namespace=examid,
         index_name="abc",
         embedding=embed
-
     )
 
-    doc = vectorstore.similarity_search(
-        text,
-        # top_k=5
-    )
-
-   
-
-    # print(doc)
+    docs = vectorstore.similarity_search(text)  # Assuming this method returns relevant documents
 
     llm = ChatOpenAI(
         model="gpt-3.5-turbo",
-        api_key=os.getenv('OPENAI_API_KEY'),
-
+        api_key=os.getenv('OPENAI_API_KEY')
     )
 
-
-
-    
-
-    # qa = RetrievalQA.from_chain_type(
-    #     llm=llm,
-    #     chain_type="stuff",
-        
-    #     retriever=vectorstore.as_retriever(),
-        
-        
-    # )
-
-    # parser = JsonOutputParser(pydantic_object=QuestionParser)
-    # parser = JsonOutputParser(pydantic_object=MultipleChoiceQuestionParser)
-
-    prompt = PromptTemplate(
-    template="Generate One Question, {question} about {query} from {document}.output is json",
-    input_variables=["query", "document", "question"],
-    partial_variables={"format_instructions": parser.get_format_instructions()},
+    prompt_template = PromptTemplate(
+        template="Generate one question, {question} about {query} from {document}. Output is json",
+        input_variables=["query", "document", "question"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
-    chain = prompt | llm  | parser
+    chain = prompt_template | llm | parser
 
-    print(text)
-
-    result = chain.invoke({"query": text, "document": format_docs(doc), "question": question})
-
-    print(result)
-    print(type(json.dumps(result)))
+    formatted_docs = format_docs(docs)
+    result = chain.invoke({"query": text, "document": formatted_docs, "question": question})
 
     return result
-
-    # return json.dumps(result)
-    # dict_result = json.loads(result)
-    # return dict_result
-
-
-    # return result
-
-
-
-
-
-    
-    # print(qa.invoke(text))
-
-    # return "Question generated successfully."
-
-
-
-
-    
-
-
-
-    
+    return json.dumps(result)  # Converting the result to a JSON string for consistency
 
