@@ -53,14 +53,17 @@ def prompt(text: str, examid: str, question_type: str = "mcq") -> dict:
     docs = vectorstore.similarity_search(text)  # Assuming this method returns relevant documents
 
     llm = ChatOpenAI(
-        model="gpt-3.5-turbo",
-        api_key=os.getenv('OPENAI_API_KEY')
+        model="gpt-4o",
+        api_key=os.getenv('OPENAI_API_KEY'),
+        model_kwargs={"response_format": {"type": "json_object"}}
+        
     )
 
     prompt_template = PromptTemplate(
-        template="Generate one question, {question} about {query} from {document}. Output is json",
+        template="Generate one question, {question} about {query} from {document}. Output is only json format.",
         input_variables=["query", "document", "question"],
         partial_variables={"format_instructions": parser.get_format_instructions()},
+        
     )
 
     chain = prompt_template | llm | parser

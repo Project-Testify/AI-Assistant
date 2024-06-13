@@ -1,6 +1,8 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 
+
+
 # Define a Pydantic model for a standard question and answer format.
 class QuestionParser(BaseModel):
     question: str = Field(description="The question generated from the text.")
