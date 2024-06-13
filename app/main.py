@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 
-# Initialize the FastAPI app with a custom title
+# Create an instance of the FastAPI application with a custom title
 app = FastAPI(title="Testify AI")
 
-@app.get("/", response_model=dict)
+@app.get("/api/assistant", response_model=dict)
 async def read_root() -> dict:
     """
-    Root GET endpoint to return a simple greeting.
-    Returns a JSON object with a greeting message.
+    Root GET endpoint that provides a simple greeting message.
+
+    Returns:
+        dict: A dictionary containing a greeting message.
     """
-    return {"Hello": "World"}
+    return {"message": "Welcome to the Testify AI Assistant!"}
