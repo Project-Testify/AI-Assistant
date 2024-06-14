@@ -1,5 +1,4 @@
 # app/__init__.py
-from fastapi import FastAPI
 from .routers.upload import router as upload_router
 from .routers.questionGenerate import router as questionGenerate_router
 
