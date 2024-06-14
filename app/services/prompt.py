@@ -46,7 +46,7 @@ def prompt(text: str, examid: str, question_type: str = "mcq") -> dict:
 
     vectorstore = PineconeVectorStore(
         namespace=examid,
-        index_name="abc",
+        index_name=os.getenv('PINECONE_INDEX_NAME'),
         embedding=embed
     )
 

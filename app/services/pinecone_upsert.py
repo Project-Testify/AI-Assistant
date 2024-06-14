@@ -35,7 +35,7 @@ def upsert(pdf_file: BinaryIO, examid: str) -> str:
         texts=[text],
         embedding=embeddings,
         namespace=examid,
-        index_name="abc"
+        index_name=os.getenv('PINECONE_INDEX_NAME')
     )
 
 
