@@ -3,7 +3,6 @@ import dotenv
 import json
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 from langchain.prompts import PromptTemplate
