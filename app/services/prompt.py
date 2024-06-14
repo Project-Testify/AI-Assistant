@@ -3,7 +3,6 @@ import dotenv
 import json
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 from langchain.prompts import PromptTemplate
@@ -46,7 +45,7 @@ def prompt(text: str, examid: str, question_type: str = "mcq") -> dict:
 
     vectorstore = PineconeVectorStore(
         namespace=examid,
-        index_name="abc",
+        index_name=os.getenv('PINECONE_INDEX_NAME'),
         embedding=embed
     )
 
