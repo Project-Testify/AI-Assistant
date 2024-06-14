@@ -10,6 +10,7 @@ pip install -r requirements.txt
 
 3. Run the app using `uvicorn app.main:app --reload`
 
+
 ```bash
 uvicorn app.main:app --reload --port 7401
 ```
