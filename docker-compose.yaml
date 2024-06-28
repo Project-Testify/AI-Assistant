@@ -1,0 +1,10 @@
+version: '1.0'
+services:
+  fastapi-app:
+    build: .
+    ports:
+      - "7401:7401"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - PYTHONUNBUFFERED=1
