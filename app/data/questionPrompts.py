@@ -6,7 +6,7 @@ from langchain_core.output_parsers import JsonOutputParser
 # Define a Pydantic model for a standard question and answer format.
 class QuestionParser(BaseModel):
     question: str = Field(description="The question generated from the text.")
-    answer: str = Field(description="The answer to the generated question.")
+    valid_answer: list[str] = Field(description="Valid answers for the generated question.")
 
 # Define a Pydantic model for multiple-choice questions.
 class Answer(BaseModel):
@@ -36,11 +36,11 @@ def mcq_prompt(options: int) -> tuple[str, JsonOutputParser]:
 # Function to generate a prompt and corresponding parser for creating essay-type questions.
 def essay_prompt() -> tuple[str, JsonOutputParser]:
     """
-    Generates a prompt for creating essay questions along with a JSON output parser.
+    Generates a prompt for creating question along with a JSON output parser.
 
     Returns:
         tuple[str, JsonOutputParser]: A tuple containing the prompt and the JSON output parser.
     """
-    prompt_text = "Generate an essay question."
+    prompt_text = "Generate an question and all valid answers"
     parser = JsonOutputParser(pydantic_object=QuestionParser)
     return (prompt_text, parser)
