@@ -13,9 +13,6 @@ services:
       - logstash
     restart: always
 
-
-
-
 # Logs
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
@@ -31,7 +28,6 @@ services:
     restart: always
     networks:
       - logstash
-    
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.14.1
@@ -60,13 +56,10 @@ services:
     restart: always
     networks:
       - logstash
-    
-
+      
 volumes:
   elasticsearch-data:
-
-
-      
+  
 networks:
   testify:
     driver: bridge
