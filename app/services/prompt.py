@@ -24,18 +24,18 @@ def format_docs(docs):
     """Helper function to format document content."""
     return "\n\n".join([d.page_content for d in docs])
 
-def select_prompt(question_type: str) -> tuple[str, JsonOutputParser]:
+def select_prompt(question_type: str,choices:str = 4) -> tuple[str, JsonOutputParser]:
     """Selects the appropriate prompt and parser based on the question type."""
     if question_type == "mcq":
-        return mcq_prompt(4)  # This function is assumed to return a tuple (prompt, parser)
+        return mcq_prompt(choices)  # This function is assumed to return a tuple (prompt, parser)
     elif question_type == "essay":
         return essay_prompt()  # This function is assumed to return a tuple (prompt, parser)
     else:
         raise ValueError("Invalid question type. Please select 'mcq' or 'essay'.")
 
-def prompt(text: str, examid: str, question_type: str = "mcq") -> dict:
+def prompt(text: str, examid: str, question_type: str = "mcq",choices:str = 4 ) -> dict:
     """Generates a question based on the provided text and exam ID."""
-    question, parser = select_prompt(question_type)
+    question, parser = select_prompt(question_type, choices)
 
     embed = OpenAIEmbeddings(
         model="text-embedding-3-large",
