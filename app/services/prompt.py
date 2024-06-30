@@ -9,6 +9,8 @@ from langchain.prompts import PromptTemplate
 
 from ..data.questionPrompts import mcq_prompt, essay_prompt
 
+from ..core.log import logger
+
 dotenv.load_dotenv()
 
 class QuestionParser(BaseModel):
@@ -31,10 +33,13 @@ def select_prompt(question_type: str,choices:str = 4) -> tuple[str, JsonOutputPa
     elif question_type == "essay":
         return essay_prompt()  # This function is assumed to return a tuple (prompt, parser)
     else:
+        logger.error("Invalid question type selected.")
         raise ValueError("Invalid question type. Please select 'mcq' or 'essay'.")
 
 def prompt(text: str, examid: str, question_type: str = "mcq",choices:str = 4 ) -> dict:
     """Generates a question based on the provided text and exam ID."""
+
+    logger.info(f"Generating a question for text: {text}")
     question, parser = select_prompt(question_type, choices)
 
     embed = OpenAIEmbeddings(
@@ -69,6 +74,8 @@ def prompt(text: str, examid: str, question_type: str = "mcq",choices:str = 4 ) 
 
     formatted_docs = format_docs(docs)
     result = chain.invoke({"query": text, "document": formatted_docs, "question": question})
+
+    logger.info(f"Generated question: {result['question']}")
 
     return result
     return json.dumps(result)  # Converting the result to a JSON string for consistency

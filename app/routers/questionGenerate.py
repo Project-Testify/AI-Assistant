@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Query
 from ..services.prompt import prompt
 
+from ..core.log import logger
+
 router = APIRouter()
 
 @router.get("/generate-question/mcq/", response_model=dict)
@@ -12,9 +14,11 @@ async def generate_question(text: str = Query(..., description="The text to gene
     try:
         # Assuming 'prompt' function is synchronous; if it's async, use 'await prompt(text, examid)'
         question_response = prompt(text, examid, question_type='mcq', choices=choices)
+        logger.info(f"Generated question: {question_response}")
         return question_response
     except Exception as e:
         # Catching a broad exception is not best practice; adjust according to specific exceptions expected from 'prompt'
+        logger.error(f"An error occurred while generating the question: {str(e)}")
         raise HTTPException(status_code=500, detail=f"An error occurred while generating the question: {str(e)}")
 
 
@@ -25,7 +29,9 @@ async def generate_essay_question(text: str = Query(..., description="The text t
     try:
         # Assuming 'prompt' function is synchronous; if it's async, use 'await prompt(text, examid, question_type='essay')
         question_response = prompt(text, examid, question_type='essay')
+        logger.info(f"Generated essay question: {question_response}")
         return question_response
     except Exception as e:
         # Catching a broad exception is not best practice; adjust according to specific exceptions expected from 'prompt'
+        logger.error(f"An error occurred while generating the essay question: {str(e)}")
         raise HTTPException(status_code=500, detail=f"An error occurred while generating the essay question: {str(e)}")
