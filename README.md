@@ -15,4 +15,14 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 7401
 ```
 
+
 4. Open API documentation at `http://localhost:7401/docs`
+
+
+## Setup using Docker (Recommended)
+
+
+```bash
+docker-compose up
+```
+
