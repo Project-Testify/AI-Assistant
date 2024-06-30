@@ -5,6 +5,8 @@ import pdfplumber
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 
+from ..core.log import logger
+
 dotenv.load_dotenv()
 
 def generate_text_from_pdf(pdf_file: BinaryIO) -> str:
@@ -18,7 +20,10 @@ def generate_text_from_pdf(pdf_file: BinaryIO) -> str:
                 full_text += page_text + "\n"
 
     if not full_text.strip():
+        logger.error("No text found in the PDF.")
         raise ValueError("No text found in the PDF.")
+    
+    logger.info("Text extracted successfully.")
     return full_text
 
 def upsert(pdf_file: BinaryIO, examid: str) -> str:

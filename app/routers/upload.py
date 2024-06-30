@@ -3,6 +3,8 @@ import os
 
 from ..services.pinecone_upsert import upsert
 
+from ..core.log import logger
+
 router = APIRouter()
 
 @router.post("/upload-pdf/", status_code=201)
@@ -12,6 +14,7 @@ async def upload_pdf(file: UploadFile = None, examid: str = Query(..., descripti
 
     """Endpoint to upload a PDF and upsert its contents into a Pinecone vector store."""
     if file.content_type != 'application/pdf':
+        logger.error("Unsupported file type. Please upload a PDF.")
         raise HTTPException(status_code=415, detail="Unsupported file type. Please upload a PDF.")
 
     # Assuming 'upsert' is an async function; if not, consider wrapping with 'await'
@@ -19,7 +22,10 @@ async def upload_pdf(file: UploadFile = None, examid: str = Query(..., descripti
     success =  upsert(file, examid)
 
     if not success:
+        logger.error("Failed to process the PDF file.")
         raise HTTPException(status_code=500, detail="Failed to process the PDF file.")
+    
+    logger.info("PDF uploaded successfully.")
 
     # Directly return a message if upsert is successful; 'Response(status_code=201)' is redundant with `status_code=201` in the decorator
     return {"message": "PDF uploaded successfully."}
