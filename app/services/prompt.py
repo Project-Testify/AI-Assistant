@@ -8,6 +8,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain.prompts import PromptTemplate
 
 from ..data.questionPrompts import mcq_prompt, essay_prompt
+from ..data.responseHandle import handle_mcq
 
 from ..core.log import logger
 
@@ -77,6 +78,14 @@ def prompt(text: str, examid: str, question_type: str = "mcq",choices:str = 4 ) 
 
     logger.info(f"Generated question: {result['question']}")
 
+
+
+
+
+    # return result
+    print(result)
+    result =  handle_mcq(result) 
     return result
+
     return json.dumps(result)  # Converting the result to a JSON string for consistency
 

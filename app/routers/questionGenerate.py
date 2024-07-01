@@ -5,7 +5,7 @@ from ..core.log import logger
 
 router = APIRouter()
 
-@router.get("/generate-question/mcq/", response_model=dict)
+@router.post("/generate-question/mcq/", response_model=dict)
 async def generate_question(text: str = Query(..., description="The text to generate a question for"),
                             examid: str = Query(..., description="The ID of the exam related to the text"),
                             choices: int = Query(4, description="The number of choices for the multiple choice question")
@@ -22,7 +22,7 @@ async def generate_question(text: str = Query(..., description="The text to gene
         raise HTTPException(status_code=500, detail=f"An error occurred while generating the question: {str(e)}")
 
 
-@router.get("/generate-question/essay/", response_model=dict)
+@router.post("/generate-question/essay/", response_model=dict)
 async def generate_essay_question(text: str = Query(..., description="The text to generate an essay question for"),
                                   examid: str = Query(..., description="The ID of the exam related to the text")) -> dict:
     """Endpoint to generate an essay question for a given text using OpenAI's model."""
