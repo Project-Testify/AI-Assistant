@@ -2,6 +2,7 @@ import re
 
 def handle_mcq(response):
     try:
+        question = dict(response)
         # Extract question, options, and correct answer from the dictionary
         question = response.get('question', 'No question provided')
         options = response.get('options', [])
@@ -12,7 +13,18 @@ def handle_mcq(response):
             print(option)
         
         # Get index of correct answer
-        correct_answer_index = options.index(correct_answer)
+        try:
+            correct_answer_index = options.index(correct_answer)
+        except:
+            # if correct answer is given as a letter, convert it to index. support for uppercase and lowercase
+            # if correct answer is given by number, convert it to index
+            if correct_answer.isdigit():
+                correct_answer_index = int(correct_answer) - 1
+            else:
+                correct_answer_index = ord(correct_answer.lower()) - 97
+            
+
+
 
         # Remove option letter from options, it can be A) or A. using regex
         cleaned_options = [re.sub(r'^[A-Za-z]\)\s*|^[A-Za-z]\.\s*', '', option).strip() for option in options]
@@ -21,7 +33,7 @@ def handle_mcq(response):
         return {
             "question": question,
             "options": cleaned_options,
-            "correct_answer_index": correct_answer_index
+            "correct_answer": correct_answer_index
         }
 
     except Exception as e:

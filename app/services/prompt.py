@@ -82,8 +82,10 @@ def prompt(text: str, examid: str, question_type: str = "mcq",choices:str = 4 ) 
 
 
 
-    return result
+    # return result
     print(result)
-    # return handle_mcq(result) 
+    result =  handle_mcq(result) 
+    return result
+
     return json.dumps(result)  # Converting the result to a JSON string for consistency
 
