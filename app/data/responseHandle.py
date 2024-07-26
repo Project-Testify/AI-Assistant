@@ -6,7 +6,18 @@ def handle_mcq(response):
         # Extract question, options, and correct answer from the dictionary
         question = response.get('question', 'No question provided')
         options = response.get('options', [])
-        correct_answer = response.get('correct_answer', 'No correct answer provided')
+        # correct_answer = response.get('correct_answer', 'No correct answer provided') 
+        # # or 
+        # correct_answer = response.get('answer', 'No correct answer provided')
+        # correct_answer = response.get('correct_answer', response.get('answer', 'No correct answer provided'))
+# correctAnswer
+        correct_answer = response.get('answer', response.get('correctAnswer', response.get('correct_answer', 'No correct answer provided')))
+
+        # If correct answer is not provided, return None
+        if not options:
+            return None
+                
+
 
         # Print the options
         for option in options:
@@ -20,8 +31,12 @@ def handle_mcq(response):
             # if correct answer is given by number, convert it to index
             if correct_answer.isdigit():
                 correct_answer_index = int(correct_answer) - 1
-            else:
+            elif correct_answer.isalpha() and len(correct_answer) == 1:
                 correct_answer_index = ord(correct_answer.lower()) - 97
+            else:
+                correct_answer_index = None
+
+            
             
 
 
