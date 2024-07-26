@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from ..services.prompt import prompt
+from ..services.generate import generate
 
 from ..core.log import logger
 
@@ -13,7 +13,7 @@ async def generate_question(text: str = Query(..., description="The text to gene
     """Endpoint to generate a question for a given text using OpenAI's model."""
     try:
         # Assuming 'prompt' function is synchronous; if it's async, use 'await prompt(text, examid)'
-        question_response = prompt(text, examid, question_type='mcq', choices=choices)
+        question_response = generate(text, examid, question_type='mcq', choices=choices)
         logger.info(f"Generated question: {question_response}")
         return question_response
     except Exception as e:
@@ -28,7 +28,7 @@ async def generate_essay_question(text: str = Query(..., description="The text t
     """Endpoint to generate an essay question for a given text using OpenAI's model."""
     try:
         # Assuming 'prompt' function is synchronous; if it's async, use 'await prompt(text, examid, question_type='essay')
-        question_response = prompt(text, examid, question_type='essay')
+        question_response = generate(text, examid, question_type='essay')
         logger.info(f"Generated essay question: {question_response}")
         return question_response
     except Exception as e:
