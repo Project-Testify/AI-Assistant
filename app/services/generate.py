@@ -55,8 +55,15 @@ class QuestionGenerator:
 
     def select_prompt(self, question_type: str, choices: int = 4, list: bool = False):
         """Selects the appropriate prompt and parser based on the question type."""
-        if list and question_type == "mcq":
-            return questionPrompts.mcq_list(choices)
+        if list:
+            if question_type == "mcq":
+                return questionPrompts.mcq_list(choices)
+            elif question_type == "essay":
+                return questionPrompts.essay_list()
+            else:
+                log.logger.error("Invalid question type selected.")
+                raise ValueError("Invalid question type. Please select 'mcq' or 'essay'.")
+        
         
 
 
@@ -134,7 +141,8 @@ class QuestionGenerator:
                 for i in range(len(result)):
                     formatted_result.append(responseHandle.handle_mcq(result[i]))
                 return formatted_result
-
+            elif question_type == "essay":
+                return result
         
         except Exception as e:
             log.logger.error(f"Error in generating list: {e}")

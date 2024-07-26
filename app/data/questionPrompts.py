@@ -56,3 +56,15 @@ def mcq_list(options:int) -> tuple[str, JsonOutputParser]:
     prompt_text = f"Generate a multiple choice questions list with {options} options and indicate the correct answer."
     parser = JsonOutputParser(pydantic_object=MultipleChoiceQuestionParser)
     return (prompt_text, parser)
+
+
+def essay_list() -> tuple[str, JsonOutputParser]:
+    """
+    Generates a prompt for creating essay-type questions list along with a JSON output parser.
+
+    Returns:
+        tuple[str, JsonOutputParser]: A tuple containing the prompt and the JSON output parser.
+    """
+    prompt_text = "Generate a question list and all valid answers"
+    parser = JsonOutputParser(pydantic_object=QuestionParser)
+    return (prompt_text, parser)

@@ -54,3 +54,20 @@ async def generate_mcq_questions(text: str = Query(..., description="The text to
         logger.error(f"An error occurred while generating the multiple choice questions: {str(e)}")
         raise HTTPException(status_code=500, detail=f"An error occurred while generating the multiple choice questions: {str(e)}")
     
+
+@router.post("/generate-questions/essay/", response_model=list[dict])
+async def generate_essay_questions(text: str = Query(..., description="The text to generate essay questions for"),
+                                      examid: str = Query(..., description="The ID of the exam related to the text"),
+                                      num_questions: int = Query(1, description="The number of questions to generate")
+                                      ) -> list[dict]:
+     """Endpoint to generate essay questions for a given text using OpenAI's model."""
+     try:
+          # Assuming 'prompt' function is synchronous; if it's async, use 'await prompt(text, examid, question_type='essay')
+          question_responses = generate_list(text, examid, question_type='essay', num_questions=num_questions)
+          logger.info(f"Generated essay questions: {question_responses}")
+          return question_responses
+     except Exception as e:
+          # Catching a broad exception is not best practice; adjust according to specific exceptions expected from 'prompt'
+          logger.error(f"An error occurred while generating the essay questions: {str(e)}")
+          raise HTTPException(status_code=500, detail=f"An error occurred while generating the essay questions: {str(e)}")
+     
