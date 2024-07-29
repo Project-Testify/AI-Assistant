@@ -18,7 +18,7 @@ app = FastAPI(title="Testify AI")
 # Enable CORS (Cross-Origin Resource Sharing) to allow requests from the frontend
 
 origins = [
-    'http://localhost:4500',
+    'http://127.0.0.1:4500',
 ]
 
 
