@@ -37,7 +37,7 @@ from logstash_async.handler import AsynchronousLogstashHandler
 # logger = setup_logger()
 
 def setup_logger():
-    logmode = os.getenv("LOG_MODE", "logstash").lower()
+    logmode = os.getenv("LOG_MODE", "console").lower()
 
     if logmode == "console":
         logging.basicConfig(level=logging.INFO)
