@@ -16,14 +16,14 @@ from pinecone.grpc import PineconeGRPC as Pinecone
 
 dotenv.load_dotenv()
 
-class QuestionParser(BaseModel):
-    question: str = Field(description="The question generated from the text.")
-    answer: str = Field(description="The answer to the generated question.")
+# class QuestionParser(BaseModel):
+#     question: str = Field(description="The question generated from the text.")
+#     answer: str = Field(description="The answer to the generated question.")
 
-class MultipleChoiceQuestionParser(BaseModel):
-    question: str = Field(description="The multiple choice question generated from the text.")
-    options: list[str] = Field(description="The options for the multiple choice question.")
-    answer: int = Field(description="The index of the correct answer in the options list.")
+# class MultipleChoiceQuestionParser(BaseModel):
+#     question: str = Field(description="The multiple choice question generated from the text.")
+#     options: list[str] = Field(description="The options for the multiple choice question.")
+#     answer: int = Field(description="The index of the correct answer in the options list.")
 
 class QuestionGenerator:
     def __init__(self, examid: str):
