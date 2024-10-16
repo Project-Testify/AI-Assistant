@@ -36,7 +36,7 @@ class Grader:
         prompt_text, parser = gradePrompts.grade_prompt(self.question, self.answer, self.valid_points)
 
         prompt_template = PromptTemplate(
-            template="Grade the answer to the question: {question} with the answer: {answer} and valid points: {valid_points}. return the correct and incorrect points as a json object",
+            template="Grade the answer to the question: {question} with the answer: {answer} and valid points: {valid_points}. return the correct and incorrect points(return exact point only included in answer) as a json object",
             input_variables=["question", "answer", "valid_points"],
             partial_variables={"format_instructions": parser.get_format_instructions()}
 
