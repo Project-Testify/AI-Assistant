@@ -8,6 +8,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain.prompts import PromptTemplate
 
 from ..data import gradePrompts
+from ..data import responseHandle
 from ..core import log
 
 ## generate List
@@ -47,6 +48,7 @@ class Grader:
         print("Grading the answer.")
 
         print(result)
+        result = responseHandle.handle_grade(result)
         return result
 
         

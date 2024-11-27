@@ -55,6 +55,46 @@ def handle_mcq(response):
         print(f"Error: {e}")
         return None
 
+
+def handle_grade(response):
+    print("Handling grade response")
+    print(response)
+    
+    # Try to get the points with the first key format
+    correct_points = response.get('correct')
+    incorrect_points = response.get('incorrect')
+    
+    # If the first format keys are not found, try the second format
+    if correct_points is None and incorrect_points is None:
+        correct_points = response.get('correct_points')
+        incorrect_points = response.get('incorrect_points')
+    
+    # If the second format keys are not found, try the third format
+    if correct_points is None and incorrect_points is None:
+        correct_points = response.get('correctPoints', [])
+        incorrect_points = response.get('incorrectPoints', [])
+    
+    return {
+        "correct_points": correct_points,
+        "incorrect_points": incorrect_points
+    }
+
+    
+       
+
+
+
+# {
+#   "correct_points": [
+#     "The discontent among Indian soldiers due to cultural insensitivity"
+#   ],
+#   "incorrect_points": [
+#     "The introduction of Western-style education",
+#     "The establishment of the Indian National Congress"
+#   ]
+# }
+
+
 # Example usage
 # response = {
 #   "question": "Which of the following best describes the role of the lexical analyzer (lexical analysis) in a compiler?",

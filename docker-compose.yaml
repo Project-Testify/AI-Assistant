@@ -61,7 +61,7 @@ services:
 #   elasticsearch-data:
   
 networks:
-  testify:
+  testify-network:
     driver: bridge
   # logstash:
   #   driver: bridge
