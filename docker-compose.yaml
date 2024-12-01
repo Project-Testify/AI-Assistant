@@ -9,7 +9,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     networks:
-      - testify
+      - testify-network
       # - logstash
     restart: always
 
