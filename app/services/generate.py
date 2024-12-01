@@ -140,16 +140,34 @@ class QuestionGenerator:
             if question_type == "mcq":
                 for i in range(len(result)):
                     formatted_result.append(responseHandle.handle_mcq(result[i]))
-                return formatted_result
+                print(formatted_result)
+                # return formatted_result
+
+                return {
+                    "success": True,
+                    "questions": formatted_result
+                }
+
             elif question_type == "essay":
-                return result
+
+                for i in range(len(result)):
+                    formatted_result.append(responseHandle.handle_essay(result[i]))
+
+                # return result
+                return {
+                    "success": True,
+                    "questions": formatted_result
+                }
         
         except Exception as e:
             log.logger.error(f"Error in generating list: {e}")
 
         print(formatted_result)
 
-        return []
+        return {
+            "success": False,
+            "questions": []
+        }
 
 
 

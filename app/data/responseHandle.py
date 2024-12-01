@@ -45,11 +45,26 @@ def handle_mcq(response):
         cleaned_options = [re.sub(r'^[A-Za-z]\)\s*|^[A-Za-z]\.\s*', '', option).strip() for option in options]
 
         # Return as dictionary
-        return {
-            "question": question,
-            "options": cleaned_options,
-            "correct_answer": correct_answer_index
+        # return {
+        #     "question": question,
+        #     "options": cleaned_options,
+        #     "correct_answer": correct_answer_index
+        # }
+        print(correct_answer_index)
+        response_options = []
+        for index, option in enumerate(options):
+            response_options.append({
+                "optionText": option,
+                "marks": 1 if index == correct_answer_index else 0,
+                "correct": index == correct_answer_index
+            })
+
+        response = {
+            "questionText": question,
+            "difficultyLevel": "EASY",  # Or determined dynamically based on your criteria
+            "options": response_options
         }
+        return response
 
     except Exception as e:
         print(f"Error: {e}")
@@ -69,3 +84,28 @@ def handle_mcq(response):
 
 # parsed_data = handle_mcq(response)
 # print(parsed_data)
+
+
+def handle_essay(original_question):
+    # Original data format
+    question = original_question["question"]
+    answers = original_question["answers"]
+
+    # New data structure
+    new_question = {
+        "questionText": question,
+        "difficultyLevel": "MEDIUM",  # Static value, change as needed
+        "coveringPoints": []
+    }
+
+    # Convert each answer to a covering point
+    for answer in answers:
+        new_question["coveringPoints"].append({
+            "coveringPointText": answer,
+            "marks": 5  # Assuming each point is worth 5 marks
+        })
+
+    return new_question
+
+
+
